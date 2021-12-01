@@ -3,8 +3,12 @@ interface Song {
     id: number
     url: string
     title: string
-    album: string
     src: string
+    album: {
+        cover_medium:string
+        id: number
+        title: string
+    }
   }
   
   export default Song

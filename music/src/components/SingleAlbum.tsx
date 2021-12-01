@@ -9,7 +9,7 @@ const SingleAlbum = ({ song }: SongDetailProps) => {
         <div className="music-card mx-2 text-white">
         <div className="media d-flex">
           <img
-            src={song.url}
+            src={song.album.cover_medium}
             className="mr-3 img-fluid img1"
             alt="cover"
           />

@@ -1,22 +1,21 @@
 import { useState, useEffect } from "react"
 import Song from "../interfaces/song"
-import { Col, Container, Row } from 'react-bootstrap'
+import { Col, Container, Row, Form, Card } from 'react-bootstrap'
 // import {Link} from 'react-router-dom'
-// import SingleAlbum from "./SingleAlbum"
-import Album from '../interfaces/album'
+import SingleAlbum from "./SingleAlbum"
 
 const Homepage = () => {
   const [songs, setSongs] = useState<Song[]>([])
-  const [album, setAlbum] = useState<Album[]>([])
+  const [query, setQuery] = useState<string>('queen')
 
   useEffect(() => {
     getSongs()
-  }, [])
+  }, [query])
 
 
   const getSongs = async () => {
     try {
-      let response = await fetch("https://striveschool-api.herokuapp.com/api/deezer/search?q=queen",
+      let response = await fetch(`https://striveschool-api.herokuapp.com/api/deezer/search?q=${query}`,
         {
           headers: {
             "Content-type": 'application/json',
@@ -24,11 +23,11 @@ const Homepage = () => {
           }
         }
       )
-      console.log(response)
+    
       if (response.ok) {
-        let data = await response.json()
+
+        let data  = await response.json()
         setSongs(data.data)
-        setAlbum(data.album)
 
       } else {
         console.log("fetching error")
@@ -44,6 +43,15 @@ const Homepage = () => {
             <Row>
                 <Col md={8}>
                     <h1>Music Search Engine</h1>
+                    <Form.Group controlId="formBasicEmail">
+                        <Form.Label>Search</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Search"
+                            value={query}
+                            onChange={e => setQuery(e.target.value)}
+                        />
+                    </Form.Group>
                 </Col>
             </Row>
             <Row>
@@ -51,7 +59,9 @@ const Homepage = () => {
                     <Row>
                         {
                             songs.length > 0 && songs.map((song) => (
-                               <img src={song.album.cover_medium} />
+                              <Col md={3}>
+                                <SingleAlbum song={song} />
+                               </Col>
                             ))
                         }
                     </Row>
